@@ -1766,7 +1766,7 @@ const ACT={
  interest:a=>{const x=S.deals.concat(DEALS).find(z=>z.id===a);if(!x||S.interest[a])return;S.interest[a]=true;addXP(5);ensureConvo(x.by,x.title);S.ui.open.convo=x.by;S.ui.tab.dealroom='msgs';save();render();toast('Interest sent. Opening a private conversation')},
  addDeal:()=>{const n=S.ui.nd;if(!n||!n.title.trim()){toast('Add a title');return}S.deals.unshift({id:'my'+Date.now(),kind:n.kind,title:n.title.trim(),desc:n.desc,budget:n.budget,by:'me'});S.ui.nd=null;S.ui.tab.dealroom='board';addXP(10);save();render();toast('Posted to DealRoom')},
  openConvo:a=>{S.ui.open.convo=a;save();render()},
- dmSend:a=>{const el=$('#dm-in');const v=el&&el.value.trim();if(!v)return;S.convos[a].push({from:'me',t:v});autoReply(a);save();render()}
+ dmSend:a=>{const el=$('#dm-in');const v=el&&el.value.trim();if(!v)return;S.convos[a].push({from:'me',t:v});autoReply(a);save();render()},
   checkout:(arg)=>{const amount=Number(arg)||99;const email=prompt('Enter your email address for checkout:');if(!email)return;startVentraCheckout(email.trim(),amount);}
 };
 document.addEventListener('click',e=>{const el=e.target.closest('[data-act]');if(!el)return;const fn=ACT[el.dataset.act];if(fn)fn(el.dataset.arg||'',el,e)});

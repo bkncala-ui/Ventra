@@ -1787,7 +1787,24 @@ document.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.id==='mento
 window.addEventListener('hashchange',()=>{ACT.closeNav();render()});
 try{const t=localStorage.getItem('ventra.theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}
 render();initDB();
+const VENTRA_API = 'http://localhost:5000'; // Replace with your live cloud backend URL when hosting online
 
+async function startVentraCheckout(email, amountInZar = 99) {
+  const res = await fetch(`${VENTRA_API}/api/payments/initialize`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, amountInZar }),
+  });
+
+  const data = await res.json();
+  if (!res.ok) {
+    alert(data.message || 'Could not start checkout.');
+    return;
+  }
+
+  localStorage.setItem('ventra_payment_ref', data.reference);
+  window.location.href = data.authorization_url;
+}
 </script>
 </body>
 </html>

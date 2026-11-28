@@ -1806,6 +1806,24 @@ async function startVentraCheckout(email, amountInZar = 99) {
   localStorage.setItem('ventra_payment_ref', data.reference);
   window.location.href = data.authorization_url;
 }
+  async function verifyVentraPaymentIfPending() {
+  const ref = localStorage.getItem('ventra_payment_ref');
+  if (!ref) return;
+
+  try {
+    const res = await fetch(`${VENTRA_API}/api/payments/verify/${encodeURIComponent(ref)}`);
+    const data = await res.json();
+    if (res.ok && data.isSubscribed) {
+      localStorage.setItem('ventra_subscribed', 'true');
+      localStorage.removeItem('ventra_payment_ref');
+      alert(data.message || 'Subscription activated!');
+    }
+  } catch (err) {
+    console.error('Verification check failed:', err);
+  }
+}
+
+verifyVentraPaymentIfPending();
 </script>
 </body>
 </html>
